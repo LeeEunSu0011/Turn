@@ -10,7 +10,18 @@ public class HeroMovement : MonoBehaviour
 
     void Start()
     {
-        transform.position = GameManager.instance.nextHeroPosition;
+        if(GameManager.instance.nextSpawnPoint != "")
+        {
+            GameObject spawnPoint = GameObject.Find(GameManager.instance.nextSpawnPoint);
+            transform.position = spawnPoint.transform.position;
+
+            GameManager.instance.nextSpawnPoint = "";
+        }
+        else if(GameManager.instance.lastHeroPosition != Vector3.zero)
+        {
+            transform.position = GameManager.instance.lastHeroPosition;
+            GameManager.instance.lastHeroPosition = Vector3.zero;
+        }
     }
 
     void FixedUpdate()
@@ -35,7 +46,15 @@ public class HeroMovement : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "EnterTown")
+        if(other.tag == "teleporter")
+        {
+            CollisionHandler col = other.gameObject.GetComponent<CollisionHandler>();
+            GameManager.instance.nextSpawnPoint = col.spawnPointName;
+            GameManager.instance.sceneToLoad = col.sceneToLoad;
+            GameManager.instance.LoadNextScene();
+        }
+
+      /*  if(other.tag == "EnterTown")
         {
             CollisionHandler col = other.gameObject.GetComponent<CollisionHandler>();
             GameManager.instance.nextHeroPosition = col.spawnPoint.transform.position;
@@ -49,22 +68,18 @@ public class HeroMovement : MonoBehaviour
             GameManager.instance.nextHeroPosition = col.spawnPoint.transform.position;
             GameManager.instance.sceneToLoad = col.sceneToLoad;
             GameManager.instance.LoadNextScene();
-        }
+        }*/
 
-        if(other.tag == "region1")
+        if(other.tag == "EncounterZone")
         {
-            GameManager.instance.curRegions = 0;
-        }
-
-        if (other.tag == "region2")
-        {
-            GameManager.instance.curRegions = 1;
+            RegionData region = other.GetComponent<RegionData>();
+            GameManager.instance.curRegions = region;
         }
     }
 
     void OnTriggerStay(Collider other)
     {
-        if(other.tag == "region1" || other.tag == "region2")
+        if(other.tag == "EncounterZone")
         {
             GameManager.instance.canGetEncounter = true;
         }
@@ -72,7 +87,7 @@ public class HeroMovement : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
-        if (other.tag == "region1" || other.tag == "region2")
+        if (other.tag == "EncounterZone")
         {
             GameManager.instance.canGetEncounter = false;
         }

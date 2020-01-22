@@ -76,15 +76,18 @@ public class EnemyStateMaschine : MonoBehaviour
 						//remove all input heroattacks
 						for (int i = 0; i < BSM.performList.Count; i++)
 						{
-							if (BSM.performList[i].AttacksGameObject == this.gameObject)
-							{
-								BSM.performList.Remove(BSM.performList[i]);
-							}
+                            if(i != 0)
+                            {
+                                if (BSM.performList[i].AttacksGameObject == this.gameObject)
+                                {
+                                    BSM.performList.Remove(BSM.performList[i]);
+                                }
 
-							if (BSM.performList[i].AttackerTarget == this.gameObject)
-							{
-								BSM.performList[i].AttackerTarget = BSM.EnemyInBattle[Random.Range(0, BSM.EnemyInBattle.Count)];
-							}
+                                if (BSM.performList[i].AttackerTarget == this.gameObject)
+                                {
+                                    BSM.performList[i].AttackerTarget = BSM.EnemyInBattle[Random.Range(0, BSM.EnemyInBattle.Count)];
+                                }
+                            }
 						}
 					}
 					//chage the color to gray / play dead animation

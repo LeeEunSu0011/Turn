@@ -9,19 +9,10 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
     //class random moster
-    [System.Serializable]
-    public class RegionData
-    {
-        public string regionName;
-        public int maxAmountEnemys = 4;
-        public string battleScene;
-        public List<GameObject> possibleEnemys = new List<GameObject>();
-    }
+    
+    public RegionData curRegions;
 
-    public int curRegions;
-
-    public List<RegionData> Regions = new List<RegionData>();
-
+    public string nextSpawnPoint;
     //Hero
     public GameObject heroCharacher;
 
@@ -129,18 +120,18 @@ public class GameManager : MonoBehaviour
     void StartBattle()
     {
         //Amount of Enemys
-        enemyAmount = Random.Range(1, Regions[curRegions].maxAmountEnemys + 1);
+        enemyAmount = Random.Range(1, curRegions.maxAmountEnemys + 1);
         //which enemys
         for (int i = 0; i < enemyAmount; i++)
         {
-            enemyToBattle.Add(Regions[curRegions].possibleEnemys[Random.Range(0, Regions[curRegions].possibleEnemys.Count)]);
+            enemyToBattle.Add(curRegions.possibleEnemys[Random.Range(0, curRegions.possibleEnemys.Count)]);
         }
         //Hero
         lastHeroPosition = GameObject.Find("HeroCharacher").gameObject.transform.position;
         nextHeroPosition = lastHeroPosition;
         lastScene = SceneManager.GetActiveScene().name;
         //Load Level
-        SceneManager.LoadScene(Regions[curRegions].battleScene);
+        SceneManager.LoadScene(curRegions.battleScene);
         //reset hero
         isWalking = false;
         gotAttacked = false;
