@@ -8,6 +8,8 @@ public class HeroMovement : MonoBehaviour
 
     Vector3 curPos, lastPos;
 
+    public Animator anim;
+
     void Start()
     {
         if(GameManager.instance.nextSpawnPoint != "")
@@ -41,7 +43,11 @@ public class HeroMovement : MonoBehaviour
         {
             GameManager.instance.isWalking = true;
         }
+
         lastPos = curPos;
+
+        //HeroAnim
+        anim.SetBool("isWalking", GameManager.instance.isWalking);
     }
 
     void OnTriggerEnter(Collider other)
@@ -53,23 +59,7 @@ public class HeroMovement : MonoBehaviour
             GameManager.instance.sceneToLoad = col.sceneToLoad;
             GameManager.instance.LoadNextScene();
         }
-
-      /*  if(other.tag == "EnterTown")
-        {
-            CollisionHandler col = other.gameObject.GetComponent<CollisionHandler>();
-            GameManager.instance.nextHeroPosition = col.spawnPoint.transform.position;
-            GameManager.instance.sceneToLoad = col.sceneToLoad;
-            GameManager.instance.LoadNextScene();
-        }
-
-        if (other.tag == "LeaveTown")
-        {
-            CollisionHandler col = other.gameObject.GetComponent<CollisionHandler>();
-            GameManager.instance.nextHeroPosition = col.spawnPoint.transform.position;
-            GameManager.instance.sceneToLoad = col.sceneToLoad;
-            GameManager.instance.LoadNextScene();
-        }*/
-
+            
         if(other.tag == "EncounterZone")
         {
             RegionData region = other.GetComponent<RegionData>();

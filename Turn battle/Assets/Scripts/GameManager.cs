@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
 
     //bools
     public bool isWalking = false;
+    public bool isRunning = false;
     public bool canGetEncounter = false;
     public bool gotAttacked = false;
 
